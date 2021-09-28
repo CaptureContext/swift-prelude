@@ -7,8 +7,10 @@ extension KeyPath {
   ///   - lhs: The root key path.
   ///   - rhs: The key path to append.
   /// - Returns: A key path from the root of the left-hand key path to the value type of the right-hand path.
-  public static func <<< <AppendedValue>(lhs: KeyPath, rhs: KeyPath<Value, AppendedValue>)
-    -> KeyPath<Root, AppendedValue> {
+  public static func <<< <AppendedValue>(
+    lhs: KeyPath,
+    rhs: KeyPath<Value, AppendedValue>
+  ) -> KeyPath<Root, AppendedValue> {
       return lhs.appending(path: rhs)
   }
 }
@@ -31,17 +33,15 @@ public func getting<S, A>(_ keyPath: KeyPath<S, A>) -> Getter<S, S, A, A> {
 extension KeyPath {
   public static func <<< <NextValue>(
     lhs: KeyPath,
-    rhs: @escaping Getter<Value, Value, NextValue, NextValue>)
-    -> Getter<Root, Root, NextValue, NextValue> {
-
+    rhs: @escaping Getter<Value, Value, NextValue, NextValue>
+  ) -> Getter<Root, Root, NextValue, NextValue> {
       return getting(lhs) <<< rhs
   }
 
   public static func <<< <SuperRoot>(
     lhs: @escaping Getter<SuperRoot, SuperRoot, Root, Root>,
-    rhs: KeyPath)
-    -> Getter<SuperRoot, SuperRoot, Value, Value> {
-
+    rhs: KeyPath
+  ) -> Getter<SuperRoot, SuperRoot, Value, Value> {
       return lhs <<< getting(rhs)
   }
 
@@ -60,17 +60,15 @@ func setting<S, A>(_ keyPath: WritableKeyPath<S, A>) -> Setter<S, S, A, A> {
 extension WritableKeyPath {
   public static func <<< <NextValue>(
     lhs: WritableKeyPath,
-    rhs: @escaping Setter<Value, Value, NextValue, NextValue>)
-    -> Setter<Root, Root, NextValue, NextValue> {
-
+    rhs: @escaping Setter<Value, Value, NextValue, NextValue>
+  ) -> Setter<Root, Root, NextValue, NextValue> {
       return setting(lhs) <<< rhs
   }
 
   public static func <<< <PreviousRoot>(
     lhs: @escaping Setter<PreviousRoot, PreviousRoot, Root, Root>,
-    rhs: WritableKeyPath)
-    -> Setter<PreviousRoot, PreviousRoot, Value, Value> {
-
+    rhs: WritableKeyPath
+  ) -> Setter<PreviousRoot, PreviousRoot, Value, Value> {
       return lhs <<< setting(rhs)
   }
 

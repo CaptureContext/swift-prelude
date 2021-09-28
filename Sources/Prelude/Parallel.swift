@@ -4,11 +4,11 @@ public final class Parallel<A> {
   private let compute: (@escaping (A) -> ()) -> ()
   private let queue = DispatchQueue(label: "Prelude.Parallel")
   fileprivate var computed: A?
-
+  
   public init(_ compute: @escaping (@escaping (A) -> ()) -> ()) {
     self.compute = compute
   }
-
+  
   public func run(_ callback: @escaping (A) -> ()) {
     self.queue.async {
       guard let computed = self.computed else {
@@ -48,7 +48,7 @@ extension Parallel {
       self.run($0 <<< f)
     }
   }
-
+  
   public static func <¢> <B>(f: @escaping (A) -> B, x: Parallel<A>) -> Parallel<B> {
     return x.map(f)
   }
@@ -67,7 +67,7 @@ extension Parallel {
       self.run { x in if let f = f.computed { g(f(x)) } }
     }
   }
-
+  
   public static func <*> <B>(f: Parallel<(A) -> B>, x: Parallel<A>) -> Parallel<B> {
     return x.apply(f)
   }
@@ -87,33 +87,30 @@ public func pure<A>(_ x: A) -> Parallel<A> {
 
 public func traverse<C, A, B>(
   _ f: @escaping (A) -> Parallel<B>
-  )
-  -> (C)
-  -> Parallel<[B]>
-  where C: Collection, C.Element == A {
-
-    return { xs in
-      guard !xs.isEmpty else { return pure([]) }
-
-      return Parallel<[B]> { callback in
-        let queue = DispatchQueue(label: "pointfree.parallel.sequence")
-
-        var completed = 0
-        var results = [B?](repeating: nil, count: Int(xs.count))
-
-        for (idx, parallel) in xs.map(f).enumerated() {
-          parallel.run { b in
-            queue.sync {
-              results[idx] = b
-              completed += 1
-              if completed == xs.count {
-                callback(results as! [B])
-              }
+) -> (C) -> Parallel<[B]>
+where C: Collection, C.Element == A {
+  return { xs in
+    guard !xs.isEmpty else { return pure([]) }
+    
+    return Parallel<[B]> { callback in
+      let queue = DispatchQueue(label: "pointfree.parallel.sequence")
+      
+      var completed = 0
+      var results = [B?](repeating: nil, count: Int(xs.count))
+      
+      for (idx, parallel) in xs.map(f).enumerated() {
+        parallel.run { b in
+          queue.sync {
+            results[idx] = b
+            completed += 1
+            if completed == xs.count {
+              callback(results as! [B])
             }
           }
         }
       }
     }
+  }
 }
 
 public func sequence<C, A>(_ xs: C) -> Parallel<[A]> where C: Collection, C.Element == Parallel<A> {

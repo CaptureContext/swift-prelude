@@ -24,9 +24,8 @@ public typealias Getter<S, T, A, B> = Fold<A, S, T, A, B>
 /// - Returns: A new getter from the source of the left-hand getter to the target of the right-hand getter.
 public func <<< <A, B, S, T, U, V>(
   _ lhs: @escaping Getter<U, V, S, T>,
-  _ rhs: @escaping Getter<S, T, A, B>)
-  -> Getter<U, V, A, B> {
-
+  _ rhs: @escaping Getter<S, T, A, B>
+) -> Getter<U, V, A, B> {
     return { forget in
       .init(forget.unwrap <<< rhs(Forget(id)).unwrap <<< lhs(Forget(id)).unwrap)
     }

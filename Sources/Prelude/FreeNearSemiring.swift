@@ -26,7 +26,9 @@ public struct FreeNearSemiring<A>: NearSemiring {
 
 // MARK: - Functor
 
-public func map<A, B>(_ f: @escaping (A) -> B) -> (FreeNearSemiring<A>) -> FreeNearSemiring<B> {
+public func map<A, B>(
+  _ f: @escaping (A) -> B
+) -> (FreeNearSemiring<A>) -> FreeNearSemiring<B> {
   return { s in
     .init(s.elements.map { $0.map(f) })
   }
@@ -34,9 +36,10 @@ public func map<A, B>(_ f: @escaping (A) -> B) -> (FreeNearSemiring<A>) -> FreeN
 
 // MARK: - Apply
 
-public func apply<A, B>(_ fss: FreeNearSemiring<(A) -> B>) -> (FreeNearSemiring<A>) -> FreeNearSemiring<B> {
+public func apply<A, B>(
+  _ fss: FreeNearSemiring<(A) -> B>
+) -> (FreeNearSemiring<A>) -> FreeNearSemiring<B> {
   return { (xss: FreeNearSemiring<A>) -> FreeNearSemiring<B> in
-
     .init(
       fss.elements.flatMap { fs in
         xss.elements.map { xs in

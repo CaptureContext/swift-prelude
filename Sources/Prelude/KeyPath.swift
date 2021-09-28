@@ -1,14 +1,14 @@
-public func get<Root, Value>(_ keyPath: KeyPath<Root, Value>) -> (Root) -> Value {
+public func get<Root, Value>(
+  _ keyPath: KeyPath<Root, Value>
+) -> (Root) -> Value {
   return { root in
     root[keyPath: keyPath]
   }
 }
 
-public func over<Root, Value>(_ keyPath: WritableKeyPath<Root, Value>)
-  -> (@escaping (Value) -> Value)
-  -> (Root)
-  -> Root {
-
+public func over<Root, Value>(
+  _ keyPath: WritableKeyPath<Root, Value>
+) -> (@escaping (Value) -> Value) -> (Root) -> Root {
     return { over in
       { root in
         var copy = root
@@ -18,7 +18,9 @@ public func over<Root, Value>(_ keyPath: WritableKeyPath<Root, Value>)
     }
 }
 
-public func set<Root, Value>(_ keyPath: WritableKeyPath<Root, Value>) -> (Value) -> (Root) -> Root {
+public func set<Root, Value>(
+  _ keyPath: WritableKeyPath<Root, Value>
+) -> (Value) -> (Root) -> Root {
   return over(keyPath) <<< const
 }
 

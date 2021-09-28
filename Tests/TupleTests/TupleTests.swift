@@ -3,7 +3,6 @@ import Tuple
 import XCTest
 
 final class TupleTests: XCTestCase {
-
   func testTuples() {
     let tuple = 1 .*. "hello" .*. true .*. 2.0 .*. unit
 

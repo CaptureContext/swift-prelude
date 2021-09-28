@@ -77,19 +77,17 @@ public func over4<A, B, C, D, R, Z>(_ o: @escaping (D) -> R) -> (T5<A, B, C, D, 
 }
 public func over5<A, B, C, D, E, R, Z>(
   _ o: @escaping (E) -> R
-  )
-  -> (T6<A, B, C, D, E, Z>)
-  -> T6<A, B, C, D, R, Z> {
-
-    return { t in get1(t) .*. get2(t) .*. get3(t) .*. get4(t) .*. o(get5(t)) .*. rest(t) }
+  
+) -> (T6<A, B, C, D, E, Z>
+) -> T6<A, B, C, D, R, Z> {
+  return { t in get1(t) .*. get2(t) .*. get3(t) .*. get4(t) .*. o(get5(t)) .*. rest(t) }
 }
 public func over6<A, B, C, D, E, F, R, Z>(
   _ o: @escaping (F) -> R
-  )
-  -> (T7<A, B, C, D, E, F, Z>)
-  -> T7<A, B, C, D, E, R, Z> {
-
-    return { t in get1(t) .*. get2(t) .*. get3(t) .*. get4(t) .*. get5(t) .*. o(get6(t)) .*. rest(t) }
+  
+) -> (T7<A, B, C, D, E, F, Z>
+) -> T7<A, B, C, D, E, R, Z> {
+  return { t in get1(t) .*. get2(t) .*. get3(t) .*. get4(t) .*. get5(t) .*. o(get6(t)) .*. rest(t) }
 }
 
 public func lift<A>(_ a: A) -> Tuple1<A> {
@@ -168,11 +166,11 @@ extension Tuple: NearSemiring where A: NearSemiring, B: NearSemiring {
   public static func + (lhs: Tuple<A, B>, rhs: Tuple<A, B>) -> Tuple<A, B> {
     return Tuple(first: lhs.first + rhs.first, second: lhs.second + rhs.second)
   }
-
+  
   public static func * (lhs: Tuple<A, B>, rhs: Tuple<A, B>) -> Tuple<A, B> {
     return Tuple(first: lhs.first * rhs.first, second: lhs.second * rhs.second)
   }
-
+  
   public static var zero: Tuple<A, B> {
     return Tuple(first: A.zero, second: B.zero)
   }
@@ -194,25 +192,25 @@ extension Tuple: HeytingAlgebra where A: HeytingAlgebra, B: HeytingAlgebra {
   public static var ff: Tuple<A, B> {
     return Tuple(first: A.ff, second: B.ff)
   }
-
+  
   public static var tt: Tuple<A, B> {
     return Tuple(first: A.tt, second: B.tt)
   }
-
+  
   public static func implies(_ a: Tuple<A, B>, _ b: Tuple<A, B>) -> Tuple<A, B> {
     return Tuple(first: A.implies(a.first, b.first), second: B.implies(a.second, b.second))
   }
-
+  
   public static func && (lhs: Tuple<A, B>, rhs: @autoclosure () throws -> Tuple<A, B>) rethrows -> Tuple<A, B> {
     let rhs = try rhs()
     return Tuple(first: lhs.first && rhs.first, second: lhs.second && rhs.second)
   }
-
+  
   public static func || (lhs: Tuple<A, B>, rhs: @autoclosure () throws -> Tuple<A, B>) rethrows -> Tuple<A, B> {
     let rhs = try rhs()
     return Tuple(first: lhs.first || rhs.first, second: lhs.second || rhs.second)
   }
-
+  
   public static prefix func ! (not: Tuple<A, B>) -> Tuple<A, B> {
     return Tuple(first: !not.first, second: !not.second)
   }

@@ -1,49 +1,117 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 import PackageDescription
 
 let package = Package(
   name: "swift-prelude",
   products: [
-    .library(name: "Either", targets: ["Either"]),
-    .library(name: "Frp", targets: ["Frp"]),
-    .library(name: "Optics", targets: ["Optics"]),
-    .library(name: "Prelude", targets: ["Prelude"]),
-    .library(name: "Reader", targets: ["Reader"]),
-    .library(name: "State", targets: ["State"]),
-    .library(name: "Tuple", targets: ["Tuple"]),
-    .library(name: "ValidationSemigroup", targets: ["ValidationSemigroup"]),
-    .library(name: "ValidationNearSemiring", targets: ["ValidationNearSemiring"]),
-    .library(name: "Writer", targets: ["Writer"]),
+    .library(
+      name: "Either",
+      targets: ["Either"]
+    ),
+    .library(
+      name: "Optics",
+      targets: ["Optics"]
+    ),
+    .library(
+      name: "Prelude",
+      targets: ["Prelude"]
+    ),
+    .library(
+      name: "Tuple",
+      targets: ["Tuple"]
+    ),
+    .library(
+      name: "ValidationSemigroup",
+      targets: ["ValidationSemigroup"]
+    ),
+    .library(
+      name: "ValidationNearSemiring",
+      targets: ["ValidationNearSemiring"]
+    )
   ],
   targets: [
-    .target(name: "Either", dependencies: ["Prelude"]),
-    .testTarget(name: "EitherTests", dependencies: ["Either"]),
-
-    .target(name: "Frp", dependencies: ["Prelude", "ValidationSemigroup"]),
-    .testTarget(name: "FrpTests", dependencies: ["Frp"]),
-
-    .target(name: "Optics", dependencies: ["Prelude", "Either"]),
-    .testTarget(name: "OpticsTests", dependencies: ["Optics"]),
-
-    .target(name: "Prelude", dependencies: []),
-    .testTarget(name: "PreludeTests", dependencies: ["Prelude"]),
-
-    .target(name: "Reader", dependencies: ["Prelude"]),
-    .testTarget(name: "ReaderTests", dependencies: ["Reader"]),
-
-    .target(name: "State", dependencies: ["Prelude"]),
-    .testTarget(name: "StateTests", dependencies: ["State"]),
-
-    .target(name: "Tuple", dependencies: ["Prelude"]),
-    .testTarget(name: "TupleTests", dependencies: ["Tuple"]),
-
-    .target(name: "ValidationSemigroup", dependencies: ["Prelude"]),
-    .testTarget(name: "ValidationSemigroupTests", dependencies: ["ValidationSemigroup"]),
-
-    .target(name: "ValidationNearSemiring", dependencies: ["Prelude", "Either"]),
-    .testTarget(name: "ValidationNearSemiringTests", dependencies: ["ValidationNearSemiring"]),
-
-    .target(name: "Writer", dependencies: ["Prelude"]),
-    .testTarget(name: "WriterTests", dependencies: ["Writer"]),
+    // MARK: Either
+    .target(
+      name: "Either",
+      dependencies: [
+        .target(name: "Prelude")
+      ]
+    ),
+    .testTarget(
+      name: "EitherTests",
+      dependencies: [
+        .target(name: "Either")
+      ]
+    ),
+    
+      // MARK: Optics
+    .target(
+      name: "Optics",
+      dependencies: [
+        .target(name: "Prelude"),
+        .target(name: "Either")
+      ]
+    ),
+    .testTarget(
+      name: "OpticsTests",
+      dependencies: [
+        .target(name: "Optics")
+      ],
+      resources: [
+        .process("__Snapshots__")
+      ]
+    ),
+    
+      // MARK: Prelude
+    .target(name: "Prelude"),
+    .testTarget(
+      name: "PreludeTests",
+      dependencies: [
+        .target(name: "Prelude")
+      ]
+    ),
+    
+      // MARK: Tuple
+    .target(
+      name: "Tuple",
+      dependencies: [
+        .target(name: "Prelude")
+      ]
+    ),
+    .testTarget(
+      name: "TupleTests",
+      dependencies: [
+        .target(name: "Tuple")
+      ]
+    ),
+    
+      // MARK: ValidationNearSemiring
+    .target(
+      name: "ValidationNearSemiring",
+      dependencies: [
+        .target(name: "Prelude"),
+        .target(name: "Either")
+      ]
+    ),
+    .testTarget(
+      name: "ValidationNearSemiringTests",
+      dependencies: [
+        .target(name: "ValidationNearSemiring")
+      ]
+    ),
+    
+      // MARK: ValidationSemigroup
+    .target(
+      name: "ValidationSemigroup",
+      dependencies: [
+        .target(name: "Prelude")
+      ]
+    ),
+    .testTarget(
+      name: "ValidationSemigroupTests",
+      dependencies: [
+        .target(name: "ValidationSemigroup")
+      ]
+    ),
   ]
 )

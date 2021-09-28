@@ -29,7 +29,7 @@ extension Sequence {
     // return fs.flatMap(self.map) // https://bugs.swift.org/browse/SR-5251
     return fs.flatMap { f in self.map { x in f(x) } }
   }
-
+  
   public static func <*> <S: Sequence, A>(fs: S, xs: Self) -> [A] where S.Element == ((Element) -> A) {
     // return xs.apply(fs) // https://bugs.swift.org/browse/SR-5251
     return fs.flatMap { f in xs.map { x in f(x) } }
@@ -127,21 +127,22 @@ public func sorted<S: Sequence>(_ xs: S) -> [S.Element] where S.Element: Compara
   return xs.sorted()
 }
 
-public func sorted<S: Sequence>(by f: @escaping (S.Element, S.Element) -> Bool) -> (S) -> [S.Element] {
+public func sorted<S: Sequence>(
+  by f: @escaping (S.Element, S.Element) -> Bool
+) -> (S) -> [S.Element] {
   return { xs in
     xs.sorted(by: f)
   }
 }
 
-public func zipWith<S: Sequence, T: Sequence, A>(_ f: @escaping (S.Element, T.Element) -> A)
-  -> (S)
-  -> (T)
-  -> [A] {
-    return { xs in
-      return { ys in
-        return zip(xs, ys).map { f($0.0, $0.1) }
-      }
+public func zipWith<S: Sequence, T: Sequence, A>(
+  _ f: @escaping (S.Element, T.Element) -> A
+) -> (S) -> (T) -> [A] {
+  return { xs in
+    return { ys in
+      return zip(xs, ys).map { f($0.0, $0.1) }
     }
+  }
 }
 
 public func intersperse<A>(_ a: A) -> ([A]) -> [A] {

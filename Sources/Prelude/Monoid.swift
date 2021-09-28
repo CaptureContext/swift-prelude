@@ -117,27 +117,27 @@ extension All: ExpressibleByBooleanLiteral {
   }
 }
 
-public struct `Any` {
-  public let any: Bool
+public struct Has {
+  public let value: Bool
 
-  public init(_ any: Bool) {
-    self.any = any
+  public init(_ value: Bool) {
+    self.value = value
   }
 }
 
-extension `Any`: Semigroup {
-  public static func <> (lhs: `Any`, rhs: `Any`) -> `Any` {
-    return self.init(lhs.any || rhs.any)
+extension Has: Semigroup {
+  public static func <> (lhs: Has, rhs: Has) -> Has {
+    return self.init(lhs.value || rhs.value)
   }
 }
 
-extension `Any`: Monoid {
-  public static var empty: `Any` {
+extension Has: Monoid {
+  public static var empty: Has {
     return false
   }
 }
 
-extension `Any`: ExpressibleByBooleanLiteral {
+extension Has: ExpressibleByBooleanLiteral {
   public init(booleanLiteral value: Bool) {
     self.init(value)
   }

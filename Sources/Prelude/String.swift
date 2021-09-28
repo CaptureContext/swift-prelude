@@ -1,5 +1,5 @@
 public func replicate(_ n: Int) -> (String) -> String {
-  return { str in (1...n).map(const(str)).joined() }
+  return { str in (0..<n).map(const(str)).joined() }
 }
 
 // MARK: - Point-free Standard Library

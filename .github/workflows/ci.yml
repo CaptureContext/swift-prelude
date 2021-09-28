@@ -2,25 +2,29 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
   pull_request:
-    branches:
-      - '*'
+    branches: [ main ]
 
 jobs:
-  build:
-    name: MacOS
-    runs-on: macOS-latest
+  test_macos:
+    runs-on: macos-11
+    timeout-minutes: 30
+    
     steps:
     - uses: actions/checkout@v2
-    - name: Run tests
-      run: make test-swift
-
-  ubuntu:
-    name: Ubuntu
+      
+    - uses: Didstopia/SwiftAction@v1.0.3
+      with:
+        swift-action: 'make test'
+        
+  test_linux:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
     steps:
     - uses: actions/checkout@v2
-    - name: Run tests
-      run: make test-linux
+      
+    - uses: Didstopia/SwiftAction@v1.0.3
+      with:
+        swift-action: 'make test'

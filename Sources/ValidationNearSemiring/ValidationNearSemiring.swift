@@ -14,13 +14,15 @@ extension Validation {
       return e2b(e)
     }
   }
-
+  
   public var isValid: Bool {
     return validate(const(false), const(true))
   }
 }
 
-public func validate<A, B, C>(_ a2c: @escaping (A) -> C) -> (@escaping (B) -> C) -> (Validation<A, B>) -> C {
+public func validate<A, B, C>(
+  _ a2c: @escaping (A) -> C
+) -> (@escaping (B) -> C) -> (Validation<A, B>) -> C {
   return { b2c in
     { ab in
       ab.validate(a2c, b2c)
@@ -39,18 +41,18 @@ extension Validation {
       return .invalid(e)
     }
   }
-
+  
   public static func <¢> <B>(a2b: (A) -> B, a: Validation) -> Validation<E, B> {
     return a.map(a2b)
   }
 }
 
-public func map<A, B, C>(_ b2c: @escaping (B) -> C)
-  -> (Validation<A, B>)
-  -> Validation<A, C> {
-    return { ab in
-      b2c <¢> ab
-    }
+public func map<A, B, C>(
+  _ b2c: @escaping (B) -> C
+) -> (Validation<A, B>) -> Validation<A, C> {
+  return { ab in
+    b2c <¢> ab
+  }
 }
 
 // MARK: - Bifunctor
@@ -66,15 +68,14 @@ extension Validation {
   }
 }
 
-public func bimap<A, B, C, D>(_ a2c: @escaping (A) -> C)
-  -> (@escaping (B) -> D)
-  -> (Validation<A, B>)
-  -> Validation<C, D> {
-    return { b2d in
-      { ab in
-        ab.bimap(a2c, b2d)
-      }
+public func bimap<A, B, C, D>(
+  _ a2c: @escaping (A) -> C
+) -> (@escaping (B) -> D) -> (Validation<A, B>) -> Validation<C, D> {
+  return { b2d in
+    { ab in
+      ab.bimap(a2c, b2d)
     }
+  }
 }
 
 // MARK: - Apply
@@ -90,18 +91,18 @@ extension Validation where E: NearSemiring {
       return .invalid(e1 * e2)
     }
   }
-
+  
   public static func <*> <B>(a2b: Validation<E, (A) -> B>, a: Validation) -> Validation<E, B> {
     return a.apply(a2b)
   }
 }
 
-public func apply<A: NearSemiring, B, C>(_ b2c: Validation<A, (B) -> C>)
-  -> (Validation<A, B>)
-  -> Validation<A, C> {
-    return { ab in
-      b2c <*> ab
-    }
+public func apply<A: NearSemiring, B, C>(
+  _ b2c: Validation<A, (B) -> C>
+) -> (Validation<A, B>) -> Validation<A, C> {
+  return { ab in
+    b2c <*> ab
+  }
 }
 
 // MARK: - Applicative

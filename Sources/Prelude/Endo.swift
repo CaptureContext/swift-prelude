@@ -19,7 +19,10 @@ extension Endo: Monoid {
 }
 
 extension Endo {
-  func imap<B>(_ f: @escaping (A) -> B, _ g: @escaping (B) -> A) -> Endo<B> {
+  func imap<B>(
+    _ f: @escaping (A) -> B,
+    _ g: @escaping (B) -> A
+  ) -> Endo<B> {
     return .init(f <<< self.call <<< g)
   }
 }

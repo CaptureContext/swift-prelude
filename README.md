@@ -1,14 +1,14 @@
 # swift-prelude
 
-[![Swift 5.1](https://img.shields.io/badge/swift-5.1-ED523F.svg?style=flat)](https://swift.org/download/)
-[![CI](https://github.com/pointfreeco/swift-prelude/workflows/CI/badge.svg)](https://actions-badge.atrox.dev/pointfreeco/swift-prelude/goto)
-[![@pointfreeco](https://img.shields.io/badge/contact-@pointfreeco-5AA9E7.svg?style=flat)](https://twitter.com/pointfreeco)
+[![Swift 5.3](https://img.shields.io/badge/Swift-5.3-ED523F.svg?style=flat)](https://swift.org/download/)
+[![CI](https://github.com/capturecontext/swift-prelude/workflows/CI/badge.svg)](https://github.com/MakeupStudio/swift-declarative-configuration/actions/workflows/CI.yml)
+[![@capturecontext](https://img.shields.io/badge/Contact-@capturecontext-5AA9E7.svg?style=flat)](https://twitter.com/maximkrouk)
 
 A collection of frameworks to enhance the Swift language.
 
 ## Stability
 
-This library should be considered experimental. If you find its contents useful, please consider maintaining a fork.
+This library should be considered experimental.
 
 ## Installation
 
@@ -17,7 +17,11 @@ import PackageDescription
 
 let package = Package(
   dependencies: [
-    .package(url: "https://github.com/pointfreeco/swift-prelude.git", .branch("main")),
+    .package(
+      name: "swift-prelude",
+      url: "https://github.com/capturecontext/swift-prelude.git",
+      .upToNextMinor(from: "0.0.1")
+    ),
   ]
 )
 ```

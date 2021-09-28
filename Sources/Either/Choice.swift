@@ -1,4 +1,6 @@
-public func left<A, B, C>(_ a2b: @escaping (A) -> B) -> (Either<A, C>) -> Either<B, C> {
+public func left<A, B, C>(
+  _ a2b: @escaping (A) -> B
+) -> (Either<A, C>) -> Either<B, C> {
   return { either in
     switch either {
     case let .left(a):
@@ -9,7 +11,9 @@ public func left<A, B, C>(_ a2b: @escaping (A) -> B) -> (Either<A, C>) -> Either
   }
 }
 
-public func right<A, B, C>(_ b2c: @escaping (B) -> C) -> (Either<A, B>) -> Either<A, C> {
+public func right<A, B, C>(
+  _ b2c: @escaping (B) -> C
+) -> (Either<A, B>) -> Either<A, C> {
   return { either in
     switch either {
     case let .left(a):

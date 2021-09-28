@@ -38,13 +38,17 @@ func ^? <S, T, A, B> (source: S, fold: @escaping Fold<First<A>, S, T, A, B>) -> 
   return previewOn(source, fold)
 }
 
-func foldMapOf<R, S, T, A, B>(_ fold: @escaping Fold<R, S, T, A, B>) -> (@escaping (A) -> R) -> (S) -> R {
+func foldMapOf<R, S, T, A, B>(
+  _ fold: @escaping Fold<R, S, T, A, B>
+) -> (@escaping (A) -> R) -> (S) -> R {
   return { f in
     fold(.init(f)).unwrap
   }
 }
 
-func foldOf<S, T, A, B>(_ fold: @escaping Fold<A, S, T, A, B>) -> (S) -> A {
+func foldOf<S, T, A, B>(
+  _ fold: @escaping Fold<A, S, T, A, B>
+) -> (S) -> A {
   return foldMapOf(fold)(id)
 }
 

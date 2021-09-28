@@ -2,12 +2,11 @@ import Prelude
 
 // MARK: - Getter
 
-public func traversed<S: Sequence>
-  (_ f: Forget<S.Element, S.Element, S.Element>)
-  -> Forget<S.Element, S, S>
-  where S.Element: Monoid {
-
-    return .init(foldMap(f.unwrap))
+public func traversed<S: Sequence>(
+  _ f: Forget<S.Element, S.Element, S.Element>
+) -> Forget<S.Element, S, S>
+where S.Element: Monoid {
+  return .init(foldMap(f.unwrap))
 }
 
 //public func traversed<A>(_ f: Forget<A, A, A>) -> Forget<A, [A], [A]> where A: Monoid {
