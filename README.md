@@ -1,7 +1,7 @@
 # swift-prelude
 
 [![Swift 5.3](https://img.shields.io/badge/Swift-5.3-ED523F.svg?style=flat)](https://swift.org/download/)
-[![CI](https://github.com/capturecontext/swift-prelude/workflows/CI/badge.svg)](https://github.com/MakeupStudio/swift-declarative-configuration/actions/workflows/CI.yml)
+[![CI](https://github.com/capturecontext/swift-prelude/workflows/Test/badge.svg)](https://github.com/capturecontext/swift-prelude/actions/workflows/Test.yml)
 [![@capturecontext](https://img.shields.io/badge/Contact-@capturecontext-5AA9E7.svg?style=flat)](https://twitter.com/maximkrouk)
 
 A collection of frameworks to enhance the Swift language.
@@ -18,7 +18,7 @@ import PackageDescription
 let package = Package(
   dependencies: [
     .package(
-      name: "swift-prelude",
+      name: "swift-prelude"
       url: "https://github.com/capturecontext/swift-prelude.git",
       .upToNextMinor(from: "0.0.1")
     ),
