@@ -1,33 +1,35 @@
-public struct Func<A, B>: Function {
-  public let call: (A) -> B
+public struct Func<Input, Output>: Function {
+  public let call: (Input) -> Output
 
-  public init(_ call: @escaping (A) -> B) {
+  public init(_ call: @escaping Signature) {
     self.call = call
   }
 }
 
 public protocol Function {
-  associatedtype A
-  associatedtype B
-  typealias Signature = (A) -> B
+  associatedtype Input
+  associatedtype Output
+  typealias A = Input
+  typealias B = Output
+  typealias Signature = (Input) -> Output
   var call: Signature { get }
   init(_ call: @escaping Signature)
 }
 
 extension Function {
-  public func eraseToFunc() -> Func<A, B> {
+  public func eraseToFunc() -> Func<Input, Output> {
     return Func(call)
   }
 }
 
 extension Function {
-  public func callAsFunction(_ input: A) -> B {
+  public func callAsFunction(_ input: Input) -> Output {
     return call(input)
   }
 }
 
-extension Function where A == Void {
-  public func callAsFunction() -> B {
+extension Function where Input == Void {
+  public func callAsFunction() -> Output {
     return call(())
   }
 }
