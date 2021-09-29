@@ -18,7 +18,7 @@ import PackageDescription
 let package = Package(
   dependencies: [
     .package(
-      name: "swift-prelude"
+      name: "swift-prelude",
       url: "https://github.com/capturecontext/swift-prelude.git",
       .upToNextMinor(from: "0.0.1")
     ),
