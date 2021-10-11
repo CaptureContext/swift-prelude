@@ -16,6 +16,12 @@ public func >>> <A, B, C>(
   return { a in b2c(a2b(a)) }
 }
 
+public func const<A>(
+  _ a: A
+) -> () -> A {
+  return { a }
+}
+
 public func const<A, B>(
   _ a: A
 ) -> (B) -> A {
@@ -64,4 +70,29 @@ public func >=> <A, B, C, D>(
   return { a in
     flatMap(rhs, lhs(a))
   }
+}
+
+@inlinable
+public func void<T>(_ f: @escaping (()) -> T) -> () -> T {
+  return { f(()) }
+}
+
+@inlinable
+public func void<T>(_ f: @escaping (()) throws -> T) -> (() throws -> T) {
+  return { try f(()) }
+}
+
+@inlinable
+public func void<T>(_ f: @escaping (Unit) -> T) -> () -> T {
+  return { f(unit) }
+}
+
+@inlinable
+public func void<T>(_ f: @escaping (Unit) throws -> T) -> (() throws -> T) {
+  return { try f(unit) }
+}
+
+@inlinable
+public func wcatch<A, B>(_ f: @escaping (A) throws -> B) -> ((A) -> B?) {
+  return { try? f($0) }
 }
