@@ -1,5 +1,3 @@
-import XCTestDynamicOverlay
-
 public protocol Function {
   associatedtype Input
   associatedtype Output

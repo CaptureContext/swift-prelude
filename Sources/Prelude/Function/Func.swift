@@ -1,9 +1,7 @@
-import XCTestDynamicOverlay
-
 public struct Func<Input, Output>: Function {
   public let call: (Input) -> Output
 
-  public init(_ call: @escaping Signature) {
+  public init(_ call: @escaping (Input) -> Output) {
     self.call = call
   }
 }
