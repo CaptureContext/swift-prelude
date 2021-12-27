@@ -1,10 +1,4 @@
-public struct Func<Input, Output>: Function {
-  public let call: (Input) -> Output
-
-  public init(_ call: @escaping Signature) {
-    self.call = call
-  }
-}
+import XCTestDynamicOverlay
 
 public protocol Function {
   associatedtype Input
@@ -16,9 +10,32 @@ public protocol Function {
   init(_ call: @escaping Signature)
 }
 
+extension Function where Input == Never {
+  public static var absurd: Self {
+    return .init(Prelude.absurd)
+  }
+}
+
+extension Function {
+  public static func const(_ value: Output) -> Self {
+    return .init(Prelude.const(value))
+  }
+  
+  public static func unimplemented(
+    file: StaticString = #fileID,
+    line: UInt = #line
+  ) -> Self {
+    return .init { _ in
+      fatalError(
+        "Call to unimplemented function declared on \(file):\(line)."
+      )
+    }
+  }
+}
+
 extension Function {
   public func eraseToFunc() -> Func<Input, Output> {
-    return Func(call)
+    return Func<Input, Output>(call)
   }
 }
 
@@ -38,7 +55,7 @@ extension Function /* : Semigroupoid */ {
   public static func >>> <G: Function>(f: Self, g: G) -> Func<A, G.B> where G.A == B {
     return .init(f.call >>> g.call)
   }
-
+  
   public static func <<< <F: Function>(f: F, g: Self) -> Func<A, F.B> where F.A == B {
     return .init(f.call <<< g.call)
   }
@@ -48,7 +65,7 @@ extension Function /* : Functor */ {
   public func map<C>(_ f: @escaping (B) -> C) -> Func<A, C> {
     return .init(self.call >>> f)
   }
-
+  
   public static func <¢> <C>(f: @escaping (B) -> C, g: Self) -> Func<A, C> {
     return g.map(f)
   }
@@ -65,14 +82,6 @@ extension Function {
   }
 }
 
-// Have to implement in on a Func type directly due to compilation error:
-// - Member operator '>¢<' of protocol 'Function' must have at least one argument of type 'Self'
-extension Func /* : Contravariant */ {
-  public static func >¢< <A, B, C>(f: @escaping (B) -> A, g: Func<A, C>) -> Func<B, C> {
-    return g.contramap(f)
-  }
-}
-
 public func contramap<A, B, C, G: Function>(_ f: @escaping (B) -> A) -> (G) -> Func<B, C>
 where G.A == A, G.B == C {
   return { $0.contramap(f) }
@@ -84,23 +93,14 @@ extension Function /* : Profunctor */ {
   }
 }
 
-public func dimap<A, B, C, D>(
-  _ f: @escaping (A) -> B,
-  _ g: @escaping (C) -> D
-  )
-  -> (Func<B, C>)
-  -> Func<A, D> {
-    return { $0.dimap(f, g) }
-}
-
 extension Function /* : Apply */ {
   public func apply<F: Function, G: Function, C>(_ f: F) -> Func<A, C>
-where F.A == A, F.B == G, G.A == B, G.B == C {
+  where F.A == A, F.B == G, G.A == B, G.B == C {
     return .init { a in f.call(a).call(self.call(a)) }
   }
-
+  
   public static func <*> <F: Function, G: Function, C>(f: F, x: Self) -> Func<A, C>
-where F.A == A, F.B == G, G.A == B, G.B == C {
+  where F.A == A, F.B == G, G.A == B, G.B == C {
     return x.apply(f)
   }
 }
@@ -113,17 +113,13 @@ where F.B == G, G.A == B, G.B == C {
 // MARK: Applicative
 extension Function {
   public static func pure(_ b: B) -> Self {
-    .init(const(b))
+    return .const(b)
   }
-}
-
-public func pure<A, B>(_ b: B) -> Func<A, B> {
-  return .init(const(b))
 }
 
 extension Function /* : Monad */ {
   public func flatMap<F: Function>(_ f: @escaping (B) -> F) -> Func<A, F.B>
-where F.A == A {
+  where F.A == A {
     return .init { f(self.call($0)).call($0) }
   }
 }
@@ -138,36 +134,28 @@ extension Function where B: Semigroup {
   }
 }
 
-extension Func: Semigroup where B: Semigroup {}
-
 extension Function where B: Monoid {
   public static var empty: Self {
-    return .init(const(B.empty))
+    return .const(B.empty)
   }
 }
-  
-extension Func: Monoid where B: Monoid {}
 
 extension Function where B: NearSemiring {
   public static func + (f: Self, g: Self) -> Self {
     return .init { f.call($0) + g.call($0) }
   }
-
+  
   public static func * (f: Self, g: Self) -> Self {
     return .init { f.call($0) * g.call($0) }
   }
-
+  
   public static var zero: Self {
-    return .init(const(B.zero))
+    return .const(B.zero)
   }
 }
-
-extension Func: NearSemiring where B: NearSemiring {}
 
 extension Function where B: Semiring {
   public static var one: Self {
-    return .init(const(B.one))
+    return .const(B.one)
   }
 }
-
-extension Func: Semiring where B: Semiring {}

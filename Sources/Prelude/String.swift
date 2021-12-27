@@ -5,15 +5,11 @@ public func replicate(_ n: Int) -> (String) -> String {
 // MARK: - Point-free Standard Library
 
 public func hasPrefix(_ prefix: String) -> (String) -> Bool {
-  return { xs in
-    xs.hasPrefix(prefix)
-  }
+  return { $0.hasPrefix(prefix) }
 }
 
 public func hasSuffix(_ suffix: String) -> (String) -> Bool {
-  return { xs in
-    xs.hasSuffix(suffix)
-  }
+  return { $0.hasSuffix(suffix) }
 }
 
 public func lowercased(_ string: String) -> String {

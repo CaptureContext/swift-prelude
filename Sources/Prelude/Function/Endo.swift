@@ -1,4 +1,4 @@
-public struct Endo<A> {
+public struct Endo<A>: Function {
   public let call: (A) -> A
 
   public init(_ call: @escaping (A) -> A) {

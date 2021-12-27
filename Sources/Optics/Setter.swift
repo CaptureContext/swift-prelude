@@ -14,7 +14,7 @@ infix operator <>~: infixr4 // appendOver
 public typealias Setter<S, T, A, B> = (@escaping (A) -> B) -> (S) -> T
 
 public func lens<S, T, A, B>(_ to: @escaping (S) -> (A, (B) -> T)) -> Setter<S, T, A, B> {
-  return { pab in to >>> first(pab) >>> { bf in bf.1(bf.0) } }
+  return { pab in to >>> mapFirst(pab) >>> { bf in bf.1(bf.0) } }
 }
 
 public func lens<S, T, A, B>(_ get: @escaping (S) -> A, _ set: @escaping (S, B) -> T) -> Setter<S, T, A, B> {

@@ -10,7 +10,10 @@ public postfix func <> <S: Semigroup>(lhs: S) -> (S) -> S {
   return { rhs in lhs <> rhs }
 }
 
-public func concat<S: Sequence>(_ xs: S, _ e: S.Element) -> S.Element where S.Element: Semigroup {
+public func concat<S: Sequence>(
+  _ xs: S,
+  _ e: S.Element
+) -> S.Element where S.Element: Semigroup {
   return xs.reduce(e, <>)
 }
 
@@ -26,6 +29,9 @@ extension Array: Semigroup {
   }
 }
 
-public func <> <A>(lhs: @escaping (A) -> A, rhs: @escaping (A) -> A) -> (A) -> A {
+public func <> <A>(
+  lhs: @escaping (A) -> A,
+  rhs: @escaping (A) -> A
+) -> (A) -> A {
   return lhs >>> rhs
 }

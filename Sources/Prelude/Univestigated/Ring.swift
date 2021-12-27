@@ -21,7 +21,10 @@ extension Unit: Ring {
   }
 }
 
-public func - <A, B: Ring>(lhs: @escaping (A) -> B, rhs: @escaping (A) -> B) -> (A) -> B {
+public func - <A, B: Ring>(
+  lhs: @escaping (A) -> B,
+  rhs: @escaping (A) -> B
+) -> (A) -> B {
   return { a in
     lhs(a) - rhs(a)
   }
