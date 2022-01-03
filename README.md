@@ -1,10 +1,12 @@
 # swift-prelude
 
-[![Swift 5.3](https://img.shields.io/badge/Swift-5.3-ED523F.svg?style=flat)](https://swift.org/download/)
-[![CI](https://github.com/capturecontext/swift-prelude/workflows/Test/badge.svg)](https://github.com/capturecontext/swift-prelude/actions/workflows/Test.yml)
-[![@capturecontext](https://img.shields.io/badge/Contact-@capturecontext-5AA9E7.svg?style=flat)](https://twitter.com/maximkrouk)
+[![Swift 5.3](https://img.shields.io/badge/Swift-5.3-ED523F.svg?style=flat)](https://swift.org/download/) [![CI](https://github.com/capturecontext/swift-prelude/workflows/Test/badge.svg)](https://github.com/capturecontext/swift-prelude/actions/workflows/Test.yml) [![@capturecontext](https://img.shields.io/badge/Contact-@capturecontext-5AA9E7.svg?style=flat)](https://twitter.com/maximkrouk)
 
 A collection of frameworks to enhance the Swift language.
+
+> NOTE: The package is early beta
+>
+> The package will take the best of the original [swift-prelude](https://github.com/pointfreeco/swift-prelude), [swift-overture](https://github.com/pointfreeco/swift-overture) and more
 
 ## Stability
 
@@ -20,7 +22,7 @@ let package = Package(
     .package(
       name: "swift-prelude",
       url: "https://github.com/capturecontext/swift-prelude.git",
-      .upToNextMinor(from: "0.0.1")
+      .upToNextMinor(from: "0.0.2")
     ),
   ]
 )
