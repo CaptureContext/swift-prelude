@@ -1,5 +1,7 @@
 public typealias None = Unit
-public struct Unit: Codable, Equatable, Hashable {}
+public struct Unit: Codable, Equatable, Hashable {
+  public init() {}
+}
 
 public let unit = Unit()
 
