@@ -1,8 +1,15 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.8
+
 import PackageDescription
 
 let package = Package(
   name: "swift-prelude",
+  platforms: [
+    .iOS(.v13),
+    .macOS(.v10_15),
+    .tvOS(.v13),
+    .watchOS(.v6),
+  ],
   products: [
     .library(
       name: "Either",
@@ -28,6 +35,12 @@ let package = Package(
       name: "ValidationNearSemiring",
       targets: ["ValidationNearSemiring"]
     )
+  ],
+  dependencies: [
+    .package(
+      url: "https://github.com/pointfreeco/swift-dependencies.git",
+      .upToNextMajor(from: "1.0.0")
+    ),
   ],
   targets: [
     // MARK: Either
@@ -63,7 +76,12 @@ let package = Package(
     ),
     
       // MARK: Prelude
-    .target(name: "Prelude"),
+    .target(
+      name: "Prelude",
+      dependencies: [
+        .product(name: "Dependencies", package: "swift-dependencies")
+      ]
+    ),
     .testTarget(
       name: "PreludeTests",
       dependencies: [

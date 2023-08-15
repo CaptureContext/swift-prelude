@@ -76,6 +76,28 @@ extension EitherIO where E == Error {
   ) -> EitherIO {
     return EitherIO.init <<< pure <| Either.wrap(f)
   }
+
+  public init(_ f: @escaping () async throws -> A) {
+    self.init(
+      run: IO {
+        do {
+          return try await .right(f())
+        } catch {
+          return .left(error)
+        }
+      }
+    )
+  }
+
+  public func performAsync() async throws -> A {
+    try await self.run.performAsync().unwrap()
+  }
+}
+
+extension EitherIO where E: Error {
+  public func performAsync() async throws -> A {
+    try await self.run.performAsync().unwrap()
+  }
 }
 
 extension EitherIO {
@@ -211,11 +233,18 @@ where S: Sequence, S.Element == EitherIO<E, A> {
 
 extension EitherIO: Alt {
   public static func <|> (
-    lhs: EitherIO,
+    lhs: EitherIO, 
     rhs: @autoclosure @escaping () -> EitherIO
-  ) -> EitherIO {
+    ) -> EitherIO {
     return .init(
-      run: .init { lhs.run.perform() <|> rhs().run.perform() }
+      run: IO {
+        switch await lhs.run.performAsync() {
+        case .left:
+          return await rhs().run.performAsync()
+        case let .right(a):
+          return .right(a)
+        }
+      }
     )
   }
 }
