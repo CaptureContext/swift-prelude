@@ -6,6 +6,7 @@ public enum Validation<E, A> {
 }
 
 extension Validation {
+  @inlinable
   public func validate<B>(_ e2b: (E) -> B, _ a2b: (A) -> B) -> B {
     switch self {
     case let .valid(a):
@@ -20,6 +21,7 @@ extension Validation {
   }
 }
 
+@inlinable
 public func validate<A, B, C>(_ a2c: @escaping (A) -> C) -> (@escaping (B) -> C) -> (Validation<A, B>) -> C {
   return { b2c in
     { ab in
@@ -31,6 +33,7 @@ public func validate<A, B, C>(_ a2c: @escaping (A) -> C) -> (@escaping (B) -> C)
 // MARK: - Functor
 
 extension Validation {
+  @inlinable
   public func map<B>(_ a2b: (A) -> B) -> Validation<E, B> {
     switch self {
     case let .valid(a):
@@ -40,11 +43,13 @@ extension Validation {
     }
   }
   
+  @inlinable
   public static func <¢> <B>(a2b: (A) -> B, a: Validation) -> Validation<E, B> {
     return a.map(a2b)
   }
 }
 
+@inlinable
 public func map<A, B, C>(
   _ b2c: @escaping (B) -> C
 ) -> (Validation<A, B>) -> Validation<A, C> {
@@ -56,6 +61,7 @@ public func map<A, B, C>(
 // MARK: - Bifunctor
 
 extension Validation {
+  @inlinable
   public func bimap<B, C>(_ e2b: (E) -> B, _ a2c: (A) -> C) -> Validation<B, C> {
     switch self {
     case let .valid(a):
@@ -66,6 +72,7 @@ extension Validation {
   }
 }
 
+@inlinable
 public func bimap<A, B, C, D>(
   _ a2c: @escaping (A) -> C
 ) -> (@escaping (B) -> D) -> (Validation<A, B>) -> Validation<C, D> {
@@ -79,6 +86,7 @@ public func bimap<A, B, C, D>(
 // MARK: - Apply
 
 extension Validation where E: Semigroup {
+  @inlinable
   public func apply<B>(_ a2b: Validation<E, (A) -> B>) -> Validation<E, B> {
     switch (a2b, self) {
     case let (.valid(f), _):
@@ -90,11 +98,13 @@ extension Validation where E: Semigroup {
     }
   }
   
+  @inlinable
   public static func <*> <B>(a2b: Validation<E, (A) -> B>, a: Validation) -> Validation<E, B> {
     return a.apply(a2b)
   }
 }
 
+@inlinable
 public func apply<A: Semigroup, B, C>(
   _ b2c: Validation<A, (B) -> C>
 ) -> (Validation<A, B>) -> Validation<A, C> {
@@ -105,6 +115,7 @@ public func apply<A: Semigroup, B, C>(
 
 // MARK: - Applicative
 
+@inlinable
 public func pure<E, A>(_ a: A) -> Validation<E, A> {
   return .valid(a)
 }
@@ -112,6 +123,7 @@ public func pure<E, A>(_ a: A) -> Validation<E, A> {
 // MARK: - Eq/Equatable
 
 extension Validation: Equatable where E: Equatable, A: Equatable {
+  @inlinable
   public static func == (lhs: Validation, rhs: Validation) -> Bool {
     switch (lhs, rhs) {
     case let (.invalid(e1), .invalid(e2)):
@@ -127,6 +139,7 @@ extension Validation: Equatable where E: Equatable, A: Equatable {
 // MARK: - Ord/Comparable
 
 extension Validation: Comparable where E: Comparable, A: Comparable {
+  @inlinable
   public static func < (lhs: Validation, rhs: Validation) -> Bool {
     switch (lhs, rhs) {
     case let (.invalid(e1), .invalid(e2)):
@@ -144,6 +157,7 @@ extension Validation: Comparable where E: Comparable, A: Comparable {
 // MARK: - Semigroup
 
 extension Validation: Semigroup where E: Semigroup, A: Semigroup {
+  @inlinable
   public static func <> (lhs: Validation, rhs: Validation) -> Validation {
     return curry(<>) <¢> lhs <*> rhs
   }

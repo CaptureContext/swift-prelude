@@ -1,3 +1,4 @@
+@inlinable
 public func optional<A, B>(
   _ default: @autoclosure @escaping () -> B
 ) -> (@escaping (A) -> B) -> (A?) -> B {
@@ -8,6 +9,7 @@ public func optional<A, B>(
   }
 }
 
+@inlinable
 public func coalesce<A>(
   with default: @autoclosure @escaping () -> A
 ) -> (A?) -> A {
@@ -16,6 +18,7 @@ public func coalesce<A>(
 
 
 extension Optional {
+  @inlinable
   public func `do`(_ f: (Wrapped) -> Void) {
     if let x = self { f(x) }
   }
@@ -24,6 +27,7 @@ extension Optional {
 // MARK: - Functor
 
 extension Optional {
+  @inlinable
   public static func <¢> <A>(
     f: (Wrapped) -> A,
     x: Optional
@@ -32,6 +36,7 @@ extension Optional {
   }
 }
 
+@inlinable
 public func map<A, B>(
   _ a2b: @escaping (A) -> B
 ) -> (A?) -> B? {
@@ -43,6 +48,7 @@ public func map<A, B>(
 // MARK: - Apply
 
 extension Optional {
+  @inlinable
   public func apply<A>(
     _ f: ((Wrapped) -> A)?
   ) -> A? {
@@ -56,6 +62,7 @@ extension Optional {
   }
 }
 
+@inlinable
 public func apply<A, B>(
   _ a2b: ((A) -> B)?
 ) -> (A?) -> B? {
@@ -66,12 +73,14 @@ public func apply<A, B>(
 
 // MARK: - Applicative
 
+@inlinable
 public func pure<A>(_ a: A) -> A? {
   return .some(a)
 }
 
 // MARK: - Traversable
 
+@inlinable
 public func traverse<S, A, B>(
   _ f: @escaping (A) -> B?
 ) -> (S) -> [B]?
@@ -86,12 +95,14 @@ where S: Sequence, S.Element == A {
   }
 }
 
+@inlinable
 public func sequence<A>(_ xs: [A?]) -> [A]? {
   return xs |> traverse(id)
 }
 
 // MARK: - Bind/Monad
 
+@inlinable
 public func flatMap<A, B>(
   _ a2b: @escaping (A) -> B?
 ) -> (A?) -> B? {
@@ -100,6 +111,7 @@ public func flatMap<A, B>(
   }
 }
 
+@inlinable
 public func >=> <A, B, C>(
   lhs: @escaping (A) -> B?,
   rhs: @escaping (B) -> C?
@@ -110,6 +122,7 @@ public func >=> <A, B, C>(
 // MARK: - Semigroup
 
 extension Optional: Semigroup where Wrapped: Semigroup {
+  @inlinable
   public static func <> (lhs: Optional, rhs: Optional) -> Optional {
     switch (lhs, rhs) {
     case (.none, _):
@@ -125,6 +138,7 @@ extension Optional: Semigroup where Wrapped: Semigroup {
 // MARK: - Monoid
 
 extension Optional: Monoid where Wrapped: Semigroup {
+  @inlinable
   public static var empty: Optional {
     return .none
   }
@@ -133,6 +147,7 @@ extension Optional: Monoid where Wrapped: Semigroup {
 // MARK: - Foldable/Sequence
 
 extension Optional {
+  @inlinable
   public func foldMap<M: Monoid>(
     _ f: @escaping (Wrapped) -> M
   ) -> M {
@@ -140,6 +155,7 @@ extension Optional {
   }
 }
 
+@inlinable
 public func foldMap<A, M: Monoid>(
   _ f: @escaping (A) -> M
 ) -> (A?) -> M {

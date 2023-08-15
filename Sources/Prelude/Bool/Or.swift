@@ -1,13 +1,16 @@
 extension Bool {
+  @inlinable
   public func or(_ value: @autoclosure () -> Bool) -> Bool {
     return self || value()
   }
 }
 
+@inlinable
 public func or(_ a: Bool, _ b: @autoclosure () -> Bool) -> Bool {
   return a || b()
 }
 
+@inlinable
 public func or(
   _ a: Bool,
   _ b: @autoclosure () -> Bool,
@@ -16,6 +19,7 @@ public func or(
   return a || b() || c()
 }
 
+@inlinable
 public func or(
   _ a: Bool,
   _ b: @autoclosure () -> Bool,
@@ -25,6 +29,7 @@ public func or(
   return a || b() || c() || d()
 }
 
+@inlinable
 public func or(
   _ a: Bool,
   _ b: @autoclosure () -> Bool,
@@ -35,6 +40,7 @@ public func or(
   return a || b() || c() || d() || e()
 }
 
+@inlinable
 public func or(
   _ a: Bool,
   _ b: @autoclosure () -> Bool,
@@ -46,6 +52,7 @@ public func or(
   return a || b() || c() || d() || e() || f()
 }
 
+@inlinable
 public func or(
   _ a: Bool,
   _ b: @autoclosure () -> Bool,
@@ -60,7 +67,7 @@ public func or(
 
 /// Logical `or` for prepared values
 ///
-/// Does not use `@autoclosure` to compute result
+/// Does not use `@autoclosure` to compute result@inlinable
 public func computedOr(
   _ a: Bool,
   _ b: Bool
@@ -70,7 +77,7 @@ public func computedOr(
 
 /// Logical `or` for prepared values
 ///
-/// Does not use `@autoclosure` to compute result
+/// Does not use `@autoclosure` to compute result@inlinable
 public func computedOr(
   _ a: Bool,
   _ b: Bool,
@@ -81,7 +88,7 @@ public func computedOr(
 
 /// Logical `or` for prepared values
 ///
-/// Does not use `@autoclosure` to compute result
+/// Does not use `@autoclosure` to compute result@inlinable
 public func computedOr(
   _ a: Bool,
   _ b: Bool,
@@ -93,7 +100,7 @@ public func computedOr(
 
 /// Logical `or` for prepared values
 ///
-/// Does not use `@autoclosure` to compute result
+/// Does not use `@autoclosure` to compute result@inlinable
 public func computedOr(
   _ a: Bool,
   _ b: Bool,
@@ -106,7 +113,7 @@ public func computedOr(
 
 /// Logical `or` for prepared values
 ///
-/// Does not use `@autoclosure` to compute result
+/// Does not use `@autoclosure` to compute result@inlinable
 public func computedOr(
   _ a: Bool,
   _ b: Bool,
@@ -120,7 +127,7 @@ public func computedOr(
 
 /// Logical `or` for prepared values
 ///
-/// Does not use `@autoclosure` to compute result
+/// Does not use `@autoclosure` to compute result@inlinable
 public func computedOr(
   _ a: Bool,
   _ b: Bool,

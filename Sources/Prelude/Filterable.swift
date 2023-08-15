@@ -1,9 +1,11 @@
 extension Optional {
+  @inlinable
   public func filter(_ p: @escaping (Wrapped) -> Bool) -> Optional {
     return self.flatMap { p($0) ? $0 : nil }
   }
 }
 
+@inlinable
 public func filterMapValues<Key, Value, NewValue>(
   _ f: @escaping (Value) -> NewValue?
 ) -> ([Key: Value]) -> [Key: NewValue] {
@@ -18,6 +20,7 @@ public func filterMapValues<Key, Value, NewValue>(
   }
 }
 
+@inlinable
 public func filteredValues<Key, Value>(_ dict: [Key: Value?]) -> [Key: Value] {
   return dict |> filterMapValues(id)
 }

@@ -1,3 +1,4 @@
+@inlinable
 public func drop<C: Collection>(
   while p: @escaping (C.Element) -> Bool
 ) -> (C) -> C.SubSequence {
@@ -6,12 +7,14 @@ public func drop<C: Collection>(
   }
 }
 
+@inlinable
 public func dropFirst<C: Collection>(
   _ xs: C
 ) -> C.SubSequence {
   return xs.dropFirst()
 }
 
+@inlinable
 public func dropFirst<C: Collection>(
   _ n: Int
 ) -> (C) -> C.SubSequence {
@@ -20,12 +23,14 @@ public func dropFirst<C: Collection>(
   }
 }
 
+@inlinable
 public func dropLast<C: Collection>(
   _ xs: C
 ) -> C.SubSequence {
   return xs.dropLast()
 }
 
+@inlinable
 public func dropLast<C: Collection>(
   _ n: Int
 ) -> (C) -> C.SubSequence {
@@ -34,6 +39,7 @@ public func dropLast<C: Collection>(
   }
 }
 
+@inlinable
 public func prefix<C: Collection>(
   _ n: Int
 ) -> (C) -> C.SubSequence {
@@ -42,6 +48,7 @@ public func prefix<C: Collection>(
   }
 }
 
+@inlinable
 public func prefix<C: Collection>(
   while p: @escaping (C.Element) -> Bool
 ) -> (C) -> C.SubSequence {
@@ -50,6 +57,7 @@ public func prefix<C: Collection>(
   }
 }
 
+@inlinable
 public func suffix<C: Collection>(
   _ n: Int
 ) -> (C) -> C.SubSequence {
@@ -58,6 +66,7 @@ public func suffix<C: Collection>(
   }
 }
 
+@inlinable
 public func uncons<C: Collection>(
   _ xs: C
 ) -> (C.Element, C.SubSequence)? {
@@ -65,6 +74,7 @@ public func uncons<C: Collection>(
   return (head, xs.dropFirst())
 }
 
+@inlinable
 public func unsnoc<C: BidirectionalCollection>(
   _ xs: C
 ) -> (C.SubSequence, C.Element)? {

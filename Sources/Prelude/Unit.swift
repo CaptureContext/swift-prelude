@@ -6,11 +6,15 @@ public struct Unit: Codable, Equatable, Hashable {
 public let unit = Unit()
 
 extension Unit {
+  @inlinable
   public init(from decoder: Decoder) throws { self.init() }
+
+  @inlinable
   public func encode(to encoder: Encoder) throws {}
 }
 
 extension Unit {
+  @inlinable
   public static func == (_: Unit, _: Unit) -> Bool {
     return true
   }
@@ -18,7 +22,8 @@ extension Unit {
 
 extension Unit: Monoid {
   public static var empty: Unit = unit
-  
+
+  @inlinable
   public static func <> (lhs: Unit, rhs: Unit) -> Unit {
     return unit
   }
@@ -27,6 +32,7 @@ extension Unit: Monoid {
 extension Unit: Error {}
 
 extension Unit: ExpressibleByNilLiteral {
+  @inlinable
   public init(nilLiteral: ()) {
     self.init()
   }

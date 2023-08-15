@@ -39,7 +39,7 @@ extension Sum: Monoid {
   }
 }
 
-extension Sum: ExpressibleByIntegerLiteral where A: ExpressibleByIntegerLiteral {
+extension Sum: ExpressibleByIntegerLiteral {
   public typealias IntegerLiteralType = A.IntegerLiteralType
 
   public init(integerLiteral: IntegerLiteralType) {
@@ -75,7 +75,7 @@ extension Product: Monoid {
   }
 }
 
-extension Product: ExpressibleByIntegerLiteral where A: ExpressibleByIntegerLiteral {
+extension Product: ExpressibleByIntegerLiteral {
   public typealias IntegerLiteralType = A.IntegerLiteralType
 
   public init(integerLiteral: IntegerLiteralType) {

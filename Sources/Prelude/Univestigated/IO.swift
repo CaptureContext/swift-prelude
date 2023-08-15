@@ -155,7 +155,6 @@ public func traverse<S, A, B>(
   -> (S)
   -> IO<[B]>
   where S: Sequence, S.Element == A {
-
     return { xs in
       IO<[B]> {
         xs.map { f($0).perform() }
@@ -165,7 +164,6 @@ public func traverse<S, A, B>(
 
 public func sequence<S, A>(
   _ xs: S
-  
 ) -> IO<[A]>
 where S: Sequence, S.Element == IO<A> {
     return xs |> traverse(id)

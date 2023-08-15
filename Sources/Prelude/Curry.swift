@@ -1,3 +1,4 @@
+@inlinable
 public func flip<A, B, C>(
   _ f: @escaping (A) -> (B) -> C
 ) -> (B) -> (A) -> C {
@@ -8,6 +9,7 @@ public func flip<A, B, C>(
   }
 }
 
+@inlinable
 public func curry<A, B, C>(
   _ function: @escaping (A, B) -> C) -> (A) -> (B
   ) -> C {
@@ -18,6 +20,7 @@ public func curry<A, B, C>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D>(
   _ function: @escaping (A, B, C) -> D
 ) -> (A) -> (B) -> (C) -> D {
@@ -30,6 +33,7 @@ public func curry<A, B, C, D>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E>(
   _ function: @escaping (A, B, C, D) -> E
 ) -> (A) -> (B) -> (C) -> (D) -> E {
@@ -44,6 +48,7 @@ public func curry<A, B, C, D, E>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F>(
   _ function: @escaping (A, B, C, D, E) -> F
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) {
@@ -60,6 +65,7 @@ public func curry<A, B, C, D, E, F>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G>(
   _ function: @escaping (A, B, C, D, E, F) -> G
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> G {
@@ -78,6 +84,7 @@ public func curry<A, B, C, D, E, F, G>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G, H>(
   _ function: @escaping (A, B, C, D, E, F, G) -> H
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> H {
@@ -98,6 +105,7 @@ public func curry<A, B, C, D, E, F, G, H>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G, H, I>(
   _ function: @escaping (A, B, C, D, E, F, G, H) -> I
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> I {
@@ -120,6 +128,7 @@ public func curry<A, B, C, D, E, F, G, H, I>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G, H, I, J>(
   _ function: @escaping (A, B, C, D, E, F, G, H, I) -> J
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> J {
@@ -144,6 +153,7 @@ public func curry<A, B, C, D, E, F, G, H, I, J>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G, H, I, J, K>(
   _ function: @escaping (A, B, C, D, E, F, G, H, I, J) -> K
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> (J) -> K {
@@ -170,6 +180,7 @@ public func curry<A, B, C, D, E, F, G, H, I, J, K>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G, H, I, J, K, L>(
   _ function: @escaping (A, B, C, D, E, F, G, H, I, J, K) -> L
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> (J) -> (K) -> L {
@@ -198,6 +209,7 @@ public func curry<A, B, C, D, E, F, G, H, I, J, K, L>(
   }
 }
 
+@inlinable
 public func curry<A, B, C, D, E, F, G, H, I, J, K, L, M>(
   _ function: @escaping (A, B, C, D, E, F, G, H, I, J, K, L) -> M
 ) -> (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> (J) -> (K) -> (L) -> M {
@@ -228,6 +240,7 @@ public func curry<A, B, C, D, E, F, G, H, I, J, K, L, M>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C>(
   _ _f: @escaping (A) -> (B) -> C
 ) -> (A, B) -> C {
@@ -236,6 +249,7 @@ public func uncurry<A, B, C>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D>(
   _ _f: @escaping (A) -> (B) -> (C) -> D
 ) -> (A, B, C) -> D {
@@ -244,6 +258,7 @@ public func uncurry<A, B, C, D>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> E
 ) -> (A, B, C, D) -> E {
@@ -252,6 +267,7 @@ public func uncurry<A, B, C, D, E>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> F
 ) -> (A, B, C, D, E) -> F {
@@ -260,6 +276,7 @@ public func uncurry<A, B, C, D, E, F>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> G
 ) -> (A, B, C, D, E, F) -> G {
@@ -268,6 +285,7 @@ public func uncurry<A, B, C, D, E, F, G>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G, H>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> H
 ) -> (A, B, C, D, E, F, G) -> H {
@@ -276,6 +294,7 @@ public func uncurry<A, B, C, D, E, F, G, H>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G, H, I>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> I
 ) -> (A, B, C, D, E, F, G, H) -> I {
@@ -284,6 +303,7 @@ public func uncurry<A, B, C, D, E, F, G, H, I>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G, H, I, J>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> J
 ) -> (A, B, C, D, E, F, G, H, I) -> J {
@@ -292,6 +312,7 @@ public func uncurry<A, B, C, D, E, F, G, H, I, J>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G, H, I, J, K>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> (J) -> K
 ) -> (A, B, C, D, E, F, G, H, I, J) -> K {
@@ -300,6 +321,7 @@ public func uncurry<A, B, C, D, E, F, G, H, I, J, K>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G, H, I, J, K, L>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> (J) -> (K) -> L
 ) -> (A, B, C, D, E, F, G, H, I, J, K) -> L {
@@ -308,6 +330,7 @@ public func uncurry<A, B, C, D, E, F, G, H, I, J, K, L>(
   }
 }
 
+@inlinable
 public func uncurry<A, B, C, D, E, F, G, H, I, J, K, L, M>(
   _ _f: @escaping (A) -> (B) -> (C) -> (D) -> (E) -> (F) -> (G) -> (H) -> (I) -> (J) -> (K) -> (L) -> M
 ) -> (A, B, C, D, E, F, G, H, I, J, K, L) -> M {

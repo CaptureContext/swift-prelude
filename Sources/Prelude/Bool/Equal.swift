@@ -1,5 +1,6 @@
 import Foundation
 
+@inlinable
 public func equal<T: Equatable>(
   _ a: T,
   _ b: T
@@ -7,6 +8,7 @@ public func equal<T: Equatable>(
   return equal(a, b, by: ==)
 }
 
+@inlinable
 public func equal<T>(
   _ a: T,
   _ b: T,
@@ -15,6 +17,7 @@ public func equal<T>(
   return comparator(a, b)
 }
 
+@inlinable
 public func equal<T, U: Equatable>(
   _ a: T,
   _ b: T,

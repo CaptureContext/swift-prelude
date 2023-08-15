@@ -2,7 +2,8 @@ import Dependencies
 import Dispatch
 
 public final class Parallel<A> {
-  private let compute: () async -> A
+  @usableFromInline
+  internal let compute: () async -> A
 
   public init(_ compute: @escaping () async -> A) {
     var computed: A? = nil
@@ -18,6 +19,7 @@ public final class Parallel<A> {
     }
   }
 
+  @inlinable
   public convenience init(_ compute: @escaping (@escaping (A) -> ()) -> ()) {
     self.init {
       await withUnsafeContinuation { continuation in
@@ -27,7 +29,8 @@ public final class Parallel<A> {
       }
     }
   }
-  
+
+  @inlinable
   public func run(_ callback: @escaping (A) -> ()) {
     Task {
       await callback(self.compute())
@@ -35,6 +38,7 @@ public final class Parallel<A> {
   }
 }
 
+@inlinable
 public func parallel<A>(_ io: IO<A>) -> Parallel<A> {
   return .init {
     await io.performAsync()
@@ -42,6 +46,7 @@ public func parallel<A>(_ io: IO<A>) -> Parallel<A> {
 }
 
 extension Parallel {
+  @inlinable
   public var sequential: IO<A> {
     return .init { callback in
       self.run(callback)
@@ -49,6 +54,7 @@ extension Parallel {
   }
 }
 
+@inlinable
 public func sequential<A>(_ x: Parallel<A>) -> IO<A> {
   return x.sequential
 }
@@ -56,17 +62,20 @@ public func sequential<A>(_ x: Parallel<A>) -> IO<A> {
 // MARK: - Functor
 
 extension Parallel {
+  @inlinable
   public func map<B>(_ f: @escaping (A) -> B) -> Parallel<B> {
     return .init {
       self.run($0 <<< f)
     }
   }
-  
+
+  @inlinable
   public static func <¢> <B>(f: @escaping (A) -> B, x: Parallel<A>) -> Parallel<B> {
     return x.map(f)
   }
 }
 
+@inlinable
 public func map<A, B>(_ f: @escaping (A) -> B) -> (Parallel<A>) -> Parallel<B> {
   return { f <¢> $0 }
 }
@@ -74,6 +83,7 @@ public func map<A, B>(_ f: @escaping (A) -> B) -> (Parallel<A>) -> Parallel<B> {
 // MARK: - Apply
 
 extension Parallel {
+  @inlinable
   public func apply<B>(_ f: Parallel<(A) -> B>) -> Parallel<B> {
     return .init {
       async let f = f.compute()
@@ -81,24 +91,28 @@ extension Parallel {
       return await f(x)
     }
   }
-  
+
+  @inlinable
   public static func <*> <B>(f: Parallel<(A) -> B>, x: Parallel<A>) -> Parallel<B> {
     return x.apply(f)
   }
 }
 
+@inlinable
 public func apply<A, B>(_ f: Parallel<(A) -> B>) -> (Parallel<A>) -> Parallel<B> {
   return { f <*> $0 }
 }
 
 // MARK: - Applicative
 
+@inlinable
 public func pure<A>(_ x: A) -> Parallel<A> {
   return parallel <<< pure <| x
 }
 
 // MARK: - Traversable
 
+@inlinable
 public func traverse<C, A, B>(
   _ f: @escaping (A) -> Parallel<B>
 ) -> (C) -> Parallel<[B]>
@@ -127,6 +141,7 @@ where C: Collection, C.Element == A {
   }
 }
 
+@inlinable
 public func sequence<C, A>(_ xs: C) -> Parallel<[A]> where C: Collection, C.Element == Parallel<A> {
   return xs |> traverse(id)
 }
@@ -134,6 +149,7 @@ public func sequence<C, A>(_ xs: C) -> Parallel<[A]> where C: Collection, C.Elem
 // MARK: - Alt
 
 extension Parallel: Alt {
+  @inlinable
   public static func <|> (lhs: Parallel, rhs: @autoclosure @escaping () -> Parallel) -> Parallel {
     return .init { f in
       var finished = false
@@ -151,6 +167,7 @@ extension Parallel: Alt {
 // MARK: - Semigroup
 
 extension Parallel: Semigroup where A: Semigroup {
+  @inlinable
   public static func <> (lhs: Parallel, rhs: Parallel) -> Parallel {
     return curry(<>) <¢> lhs <*> rhs
   }
@@ -159,6 +176,7 @@ extension Parallel: Semigroup where A: Semigroup {
 // MARK: - Monoid
 
 extension Parallel: Monoid where A: Monoid {
+  @inlinable
   public static var empty: Parallel {
     return pure(A.empty)
   }

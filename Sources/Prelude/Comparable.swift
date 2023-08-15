@@ -10,6 +10,7 @@ extension Comparable {
   }
 }
 
+@inlinable
 public func compare<A: Comparable>(
   _ a: A
 ) -> (A) -> Comparator {
@@ -17,41 +18,48 @@ public func compare<A: Comparable>(
 }
 
 extension Bool: Comparable {
+  @inlinable
   public static func < (lhs: Bool, rhs: Bool) -> Bool {
     return (lhs, rhs) == (false, true)
   }
 }
 
 extension Unit: Comparable {
+  @inlinable
   public static func < (_: Unit, _: Unit) -> Bool {
     return false
   }
 }
 
+@inlinable
 public func lessThan<A: Comparable>(
   _ a: A
 ) -> (A) -> Bool {
   return flip(curry(<)) <| a
 }
 
+@inlinable
 public func lessThanOrEqual<A: Comparable>(
   to a: A
 ) -> (A) -> Bool {
   return flip(curry(<=)) <| a
 }
 
+@inlinable
 public func greaterThan<A: Comparable>(
   _ a: A
 ) -> (A) -> Bool {
   return flip(curry(>)) <| a
 }
 
+@inlinable
 public func greaterThanOrEqual<A: Comparable>(
   to a: A
 ) -> (A) -> Bool {
   return flip(curry(>=)) <| a
 }
 
+@inlinable
 public func < <A, B: Comparable>(
   f: @escaping (A) -> B,
   x: B
@@ -59,6 +67,7 @@ public func < <A, B: Comparable>(
   return f >>> lessThan(x)
 }
 
+@inlinable
 public func <= <A, B: Comparable>(
   f: @escaping (A) -> B,
   x: B
@@ -66,6 +75,7 @@ public func <= <A, B: Comparable>(
   return f >>> lessThanOrEqual(to: x)
 }
 
+@inlinable
 public func > <A, B: Comparable>(
   f: @escaping (A) -> B,
   x: B
@@ -73,6 +83,7 @@ public func > <A, B: Comparable>(
   return f >>> greaterThan(x)
 }
 
+@inlinable
 public func >= <A, B: Comparable>(
   f: @escaping (A) -> B,
   x: B
@@ -80,6 +91,7 @@ public func >= <A, B: Comparable>(
   return f >>> greaterThanOrEqual(to: x)
 }
 
+@inlinable
 public func clamp<T>(
   _ to: CountableClosedRange<T>
 ) -> (T) -> T {
@@ -88,6 +100,7 @@ public func clamp<T>(
   }
 }
 
+@inlinable
 public func clamp<T>(
   _ to: CountableRange<T>
 ) -> (T) -> T {
@@ -97,6 +110,7 @@ public func clamp<T>(
 }
 
 @available(*, deprecated, message: "Use `clamp` on a countable range instead")
+@inlinable
 public func clamp<T>(
   _ to: Range<T>
 ) -> (T) -> T {
@@ -105,6 +119,7 @@ public func clamp<T>(
   }
 }
 
+@inlinable
 public func their<A, B>(
   _ f: @escaping (A) -> B,
   _ g: @escaping (B, B) -> Bool
@@ -112,6 +127,7 @@ public func their<A, B>(
   return { g(f($0), f($1)) }
 }
 
+@inlinable
 public func their<A, B: Comparable>(
   _ f: @escaping (A) -> B
 ) -> (A, A) -> Bool {

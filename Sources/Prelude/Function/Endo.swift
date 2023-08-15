@@ -1,28 +1,31 @@
-public struct Endo<A>: Function {
-  public let call: (A) -> A
+public struct Endo<A>: SyncFunction {
+  public let syncCall: (A) -> A
 
-  public init(_ call: @escaping (A) -> A) {
-    self.call = call
+  public init(syncCall: @escaping (A) -> A) {
+    self.syncCall = syncCall
   }
 }
 
 extension Endo: Semigroup {
+  @inlinable
   public static func <> (lhs: Endo<A>, rhs: Endo<A>) -> Endo<A> {
-    return .init(lhs.call >>> rhs.call)
+    return .sync(lhs.syncCall >>> rhs.syncCall)
   }
 }
 
 extension Endo: Monoid {
+  @inlinable
   public static var empty: Endo<A> {
-    return .init(id)
+    return .sync(id)
   }
 }
 
 extension Endo {
-  func imap<B>(
+  @inlinable
+  public func imap<B>(
     _ f: @escaping (A) -> B,
     _ g: @escaping (B) -> A
   ) -> Endo<B> {
-    return .init(f <<< self.call <<< g)
+    return .sync(f <<< self.syncCall <<< g)
   }
 }
