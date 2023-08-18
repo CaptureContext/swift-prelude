@@ -1,16 +1,19 @@
 # swift-prelude
 
-[![Swift 5.3](https://img.shields.io/badge/Swift-5.3-ED523F.svg?style=flat)](https://swift.org/download/) [![CI](https://github.com/capturecontext/swift-prelude/workflows/Test/badge.svg)](https://github.com/capturecontext/swift-prelude/actions/workflows/Test.yml) [![@capturecontext](https://img.shields.io/badge/Contact-@capturecontext-5AA9E7.svg?style=flat)](https://twitter.com/maximkrouk)
-
 A collection of frameworks to enhance the Swift language.
 
 > NOTE: The package is early beta
 >
-> The package will take the best of the original [swift-prelude](https://github.com/pointfreeco/swift-prelude), [swift-overture](https://github.com/pointfreeco/swift-overture) and more
+> The package will take the best of the original
+> - [swift-prelude](https://github.com/pointfreeco/swift-prelude)
+> - [swift-overture](https://github.com/pointfreeco/swift-overture)
+> Add more and remove some extras
 
 ## Stability
 
-This library should be considered experimental.
+- This library should be considered experimental. But we love semver, so there shouldn't be any surprises if you depend on versions rather than branches.
+
+- If something broked due to your dependency on the old `main` or `develop` branches, use version `0.0.3`, it should fix the problem without additional work.
 
 ## Installation
 
@@ -20,9 +23,8 @@ import PackageDescription
 let package = Package(
   dependencies: [
     .package(
-      name: "swift-prelude",
       url: "https://github.com/capturecontext/swift-prelude.git",
-      .upToNextMinor(from: "0.0.2")
+      .upToNextMinor(from: "0.2.0")
     ),
   ]
 )
