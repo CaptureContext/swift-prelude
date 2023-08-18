@@ -7,7 +7,6 @@ A collection of frameworks to enhance the Swift language.
 > The package will take the best of the original
 > - [swift-prelude](https://github.com/pointfreeco/swift-prelude)
 > - [swift-overture](https://github.com/pointfreeco/swift-overture)
-> Add more and remove some extras
 
 ## Stability
 
