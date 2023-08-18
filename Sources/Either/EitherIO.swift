@@ -9,13 +9,15 @@ public struct EitherIO<E, A> {
   public init(run: IO<Either<E, A>>) {
     self.run = run
   }
-  
+
+  @inlinable
   public func `catch`(
     _ f: @escaping (E) -> EitherIO
   ) -> EitherIO {
     return catchE(self, f)
   }
-  
+
+  @inlinable
   public func mapExcept<F, B>(
     _ f: @escaping (Either<E, A>) -> Either<F, B>
   ) -> EitherIO<F, B> {
@@ -23,7 +25,8 @@ public struct EitherIO<E, A> {
       run: self.run.map(f)
     )
   }
-  
+
+  @inlinable
   public func withExcept<F>(
     _ f: @escaping (E) -> F
   ) -> EitherIO<F, A> {
@@ -31,24 +34,28 @@ public struct EitherIO<E, A> {
   }
 }
 
+@inlinable
 public func lift<E, A>(
   _ x: Either<E, A>
 ) -> EitherIO<E, A> {
   return EitherIO.init <<< pure <| x
 }
 
+@inlinable
 public func lift<E, A>(
   _ x: IO<A>
 ) -> EitherIO<E, A> {
   return EitherIO.init <<< map(Either.right) <| x
 }
 
+@inlinable
 public func throwE<E, A>(
   _ x: E
 ) -> EitherIO<E, A> {
   return lift(.left(x))
 }
 
+@inlinable
 public func catchE<E, A>(
   _ x: EitherIO<E, A>,
   _ f: @escaping (E) -> EitherIO<E, A>
@@ -58,12 +65,14 @@ public func catchE<E, A>(
   )
 }
 
+@inlinable
 public func mapExcept<E, F, A, B>(
   _ f: @escaping (Either<E, A>) -> Either<F, B>
 ) -> (EitherIO<E, A>) -> EitherIO<F, B> {
   return { $0.mapExcept(f) }
 }
 
+@inlinable
 public func withExcept<E, F, A>(
   _ f: @escaping (E) -> F
 ) -> (EitherIO<E, A>) -> EitherIO<F, A> {
@@ -71,12 +80,14 @@ public func withExcept<E, F, A>(
 }
 
 extension EitherIO where E == Error {
+  @inlinable
   public static func wrap(
     _ f: @escaping () throws -> A
   ) -> EitherIO {
     return EitherIO.init <<< pure <| Either.wrap(f)
   }
 
+  @inlinable
   public init(_ f: @escaping () async throws -> A) {
     self.init(
       run: IO {
@@ -89,25 +100,29 @@ extension EitherIO where E == Error {
     )
   }
 
+  @inlinable
   public func performAsync() async throws -> A {
     try await self.run.performAsync().unwrap()
   }
 }
 
 extension EitherIO where E: Error {
+  @inlinable
   public func performAsync() async throws -> A {
     try await self.run.performAsync().unwrap()
   }
 }
 
 extension EitherIO {
+  @inlinable
   public func retry(maxRetries: Int) -> EitherIO {
     return retry(
       maxRetries: maxRetries,
       backoff: const(.seconds(0))
     )
   }
-  
+
+  @inlinable
   public func retry(
     maxRetries: Int,
     backoff: @escaping (Int) -> DispatchTimeInterval
@@ -118,8 +133,9 @@ extension EitherIO {
       backoff: backoff
     )
   }
-  
-  private func retry(
+
+  @usableFromInline
+  internal func retry(
     maxRetries: Int,
     attempts: Int,
     backoff: @escaping (Int) -> DispatchTimeInterval
@@ -136,11 +152,13 @@ extension EitherIO {
         .delay(backoff(attempts))
     )
   }
-  
+
+  @inlinable
   public func delay(_ interval: DispatchTimeInterval) -> EitherIO {
     return .init(run: self.run.delay(interval))
   }
-  
+
+  @inlinable
   public func delay(_ interval: TimeInterval) -> EitherIO {
     return .init(run: self.run.delay(interval))
   }
@@ -149,6 +167,7 @@ extension EitherIO {
 // MARK: - Functor
 
 extension EitherIO {
+  @inlinable
   public func map<B>(
     _ f: @escaping (A) -> B
   ) -> EitherIO<E, B> {
@@ -156,7 +175,8 @@ extension EitherIO {
       run: self.run.map { $0.map(f) }
     )
   }
-  
+
+  @inlinable
   public static func <¢> <B>(
     f: @escaping (A) -> B,
     x: EitherIO
@@ -165,6 +185,7 @@ extension EitherIO {
   }
 }
 
+@inlinable
 public func map<E, A, B>(
   _ f: @escaping (A) -> B
 ) -> (EitherIO<E, A>) -> EitherIO<E, B> {
@@ -174,6 +195,7 @@ public func map<E, A, B>(
 // MARK: - Bifunctor
 
 extension EitherIO {
+  @inlinable
   public func bimap<F, B>(
     _ f: @escaping (E) -> F,
     _ g: @escaping (A) -> B
@@ -182,6 +204,7 @@ extension EitherIO {
   }
 }
 
+@inlinable
 public func bimap<E, F, A, B>(
   _ f: @escaping (E) -> F,
   _ g: @escaping (A) -> B
@@ -192,12 +215,14 @@ public func bimap<E, F, A, B>(
 // MARK: - Apply
 
 extension EitherIO {
+  @inlinable
   public func apply<B>(
     _ f: EitherIO<E, (A) -> B>
   ) -> EitherIO<E, B> {
     return .init(run: curry(<*>) <¢> f.run <*> self.run)
   }
-  
+
+  @inlinable
   public static func <*> <B>(
     f: EitherIO<E, (A) -> B>,
     x: EitherIO
@@ -206,6 +231,7 @@ extension EitherIO {
   }
 }
 
+@inlinable
 public func apply<E, A, B>(
   _ f: EitherIO<E, (A) -> B>
 ) -> (EitherIO<E, A>) -> EitherIO<E, B> {
@@ -214,14 +240,16 @@ public func apply<E, A, B>(
 
 // MARK: - Applicative
 
+@inlinable
 public func pure<E, A>(_ x: (A)) -> EitherIO<E, A> {
   return EitherIO.init <<< pure <<< pure <| x
 }
 
 // MARK: - Traversable
 
-// Sequences an array of `EitherIO`'s by first sequencing the `IO` values, and then sequencing the `Either`
-// values.
+/// Sequences an array of `EitherIO`'s by first sequencing the `IO` values, and then sequencing the `Either`
+/// values.
+@inlinable
 public func sequence<S, E, A>(
   _ xs: S
 ) -> EitherIO<E, [A]>
@@ -232,6 +260,7 @@ where S: Sequence, S.Element == EitherIO<E, A> {
 // MARK: - Alt
 
 extension EitherIO: Alt {
+  @inlinable
   public static func <|> (
     lhs: EitherIO, 
     rhs: @autoclosure @escaping () -> EitherIO
@@ -252,6 +281,7 @@ extension EitherIO: Alt {
 // MARK: - Bind/Monad
 
 extension EitherIO {
+  @inlinable
   public func flatMap<B>(
     _ f: @escaping (A) -> EitherIO<E, B>
   ) -> EitherIO<E, B> {
@@ -261,12 +291,14 @@ extension EitherIO {
   }
 }
 
+@inlinable
 public func flatMap<E, A, B>(
   _ f: @escaping (A) -> EitherIO<E, B>
 ) -> (EitherIO<E, A>) -> EitherIO<E, B> {
   return { $0.flatMap(f) }
 }
 
+@inlinable
 public func >=> <E, A, B, C>(
   f: @escaping (A) -> EitherIO<E, B>,
   g: @escaping (B) -> EitherIO<E, C>

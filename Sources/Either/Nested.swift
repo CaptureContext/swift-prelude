@@ -12,42 +12,49 @@ public typealias Either4<A, B, C, D> = E5<A, B, C, D, Never>
 public typealias Either5<A, B, C, D, E> = E6<A, B, C, D, E, Never>
 public typealias Either6<A, B, C, D, E, F> = E7<A, B, C, D, E, F, Never>
 
+@inlinable
 public func inj1<A, Z>(
   _ v: A
 ) -> E2<A, Z> {
   return .left(v)
 }
 
+@inlinable
 public func inj2<A, B, Z>(
   _ v: B
 ) -> E3<A, B, Z> {
   return .right(.left(v))
 }
 
+@inlinable
 public func inj3<A, B, C, Z>(
   _ v: C
 ) -> E4<A, B, C, Z> {
   return .right(.right(.left(v)))
 }
 
+@inlinable
 public func inj4<A, B, C, D, Z>(
   _ v: D
 ) -> E5<A, B, C, D, Z> {
   return .right(.right(.right(.left(v))))
 }
 
+@inlinable
 public func inj5<A, B, C, D, E, Z>(
   _ v: E
 ) -> E6<A, B, C, D, E, Z> {
   return .right(.right(.right(.right(.left(v)))))
 }
 
+@inlinable
 public func inj6<A, B, C, D, E, F, Z>(
   _ v: F
 ) -> E7<A, B, C, D, E, F, Z> {
   return .right(.right(.right(.right(.right(.left(v))))))
 }
 
+@inlinable
 public func get1<A, Z>(
 _ e: E2<A, Z>
 ) -> A? {
@@ -55,6 +62,7 @@ _ e: E2<A, Z>
   return nil
 }
 
+@inlinable
 public func get2<A, B, Z>(
 _ e: E3<A, B, Z>
 ) -> B? {
@@ -62,6 +70,7 @@ _ e: E3<A, B, Z>
   return nil
 }
 
+@inlinable
 public func get3<A, B, C, Z>(
 _ e: E4<A, B, C, Z>
 ) -> C? {
@@ -69,6 +78,7 @@ _ e: E4<A, B, C, Z>
   return nil
 }
 
+@inlinable
 public func get4<A, B, C, D, Z>(
   _ e: E5<A, B, C, D, Z>
 ) -> D? {
@@ -76,6 +86,7 @@ public func get4<A, B, C, D, Z>(
   return nil
 }
 
+@inlinable
 public func get5<A, B, C, D, E, Z>(
   _ e: E6<A, B, C, D, E, Z>
 ) -> E? {
@@ -83,6 +94,7 @@ public func get5<A, B, C, D, E, Z>(
   return nil
 }
 
+@inlinable
 public func get6<A, B, C, D, E, F, Z>(
   _ e: E7<A, B, C, D, E, F, Z>
 ) -> F? {
@@ -90,6 +102,7 @@ public func get6<A, B, C, D, E, F, Z>(
   return nil
 }
 
+@inlinable
 public func either3<A, B, C, D>(
   _ either: Either3<A, B, C>,
   _ a2d: (A) -> D,
@@ -106,6 +119,7 @@ public func either3<A, B, C, D>(
     }
 }
 
+@inlinable
 public func at1<A, R, Z>(
   _ v: R,
   _ f: @escaping (A) -> R
@@ -113,6 +127,7 @@ public func at1<A, R, Z>(
   return { get1($0).map(f) ?? v }
 }
 
+@inlinable
 public func at2<A, B, R, Z>(
   _ v: R,
   _ f: @escaping (B) -> R
@@ -120,6 +135,7 @@ public func at2<A, B, R, Z>(
   return { get2($0).map(f) ?? v }
 }
 
+@inlinable
 public func at3<A, B, C, R, Z>(
   _ v: R,
   _ f: @escaping (C) -> R
@@ -127,6 +143,7 @@ public func at3<A, B, C, R, Z>(
   return { get3($0).map(f) ?? v }
 }
 
+@inlinable
 public func at4<A, B, C, D, R, Z>(
   _ v: R,
   _ f: @escaping (D) -> R
@@ -134,6 +151,7 @@ public func at4<A, B, C, D, R, Z>(
   return { get4($0).map(f) ?? v }
 }
 
+@inlinable
 public func at5<A, B, C, D, E, R, Z>(
   _ v: R,
   _ f: @escaping (E) -> R
@@ -141,6 +159,7 @@ public func at5<A, B, C, D, E, R, Z>(
   return { get5($0).map(f) ?? v }
 }
 
+@inlinable
 public func at6<A, B, C, D, E, F, R, Z>(
   _ v: R,
   _ f: @escaping (F) -> R

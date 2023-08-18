@@ -1,38 +1,36 @@
 import Dependencies
 import Dispatch
 
-public final class Parallel<A> {
-  @usableFromInline
-  internal let compute: () async -> A
+public final class Parallel<Output>: AsyncFunction {
+  public typealias Input = Void
 
-  public init(_ compute: @escaping () async -> A) {
-    var computed: A? = nil
+  @usableFromInline
+  internal let compute: () async -> Output
+
+  public init(_ call: @escaping AsyncSignature) {
+    var computed: Output? = nil
     self.compute = withEscapedDependencies { continuation in
       return {
         if let computed = computed {
           return computed
         }
-        let result = await continuation.yield { await compute() }
+        let result = await continuation.yield { await call(()) }
         computed = result
         return result
       }
     }
   }
 
-  @inlinable
-  public convenience init(_ compute: @escaping (@escaping (A) -> ()) -> ()) {
-    self.init {
-      await withUnsafeContinuation { continuation in
-        compute { a in
-          continuation.resume(returning: a)
-        }
-      }
-    }
+  public func callAsFunction(_ input: Void) async -> Output {
+    await compute()
   }
 
   @inlinable
-  public func run(_ callback: @escaping (A) -> ()) {
-    Task {
+  public func run(
+    priority: TaskPriority? = .none,
+    _ callback: @escaping (Output) -> Void
+  ) {
+    Task(priority: priority) {
       await callback(self.compute())
     }
   }
@@ -47,7 +45,7 @@ public func parallel<A>(_ io: IO<A>) -> Parallel<A> {
 
 extension Parallel {
   @inlinable
-  public var sequential: IO<A> {
+  public var sequential: IO<Output> {
     return .init { callback in
       self.run(callback)
     }
@@ -63,15 +61,22 @@ public func sequential<A>(_ x: Parallel<A>) -> IO<A> {
 
 extension Parallel {
   @inlinable
-  public func map<B>(_ f: @escaping (A) -> B) -> Parallel<B> {
-    return .init {
-      self.run($0 <<< f)
-    }
+  public func map<NewOutput>(
+    _ f: @escaping (Output) -> NewOutput
+  ) -> Parallel<NewOutput> {
+    return .init(unsafe: { _ in
+      return { handler in
+        self.run(handler <<< f)
+      }
+    })
   }
 
   @inlinable
-  public static func <¢> <B>(f: @escaping (A) -> B, x: Parallel<A>) -> Parallel<B> {
-    return x.map(f)
+  public static func <¢> <NewOutput>(
+    lhs: @escaping (Output) -> NewOutput,
+    rhs: Parallel<Output>
+  ) -> Parallel<NewOutput> {
+    return rhs.map(lhs)
   }
 }
 
@@ -84,7 +89,9 @@ public func map<A, B>(_ f: @escaping (A) -> B) -> (Parallel<A>) -> Parallel<B> {
 
 extension Parallel {
   @inlinable
-  public func apply<B>(_ f: Parallel<(A) -> B>) -> Parallel<B> {
+  public func apply<NewOutput>(
+    _ f: Parallel<(Output) -> NewOutput>
+  ) -> Parallel<NewOutput> {
     return .init {
       async let f = f.compute()
       async let x = self.compute()
@@ -93,8 +100,11 @@ extension Parallel {
   }
 
   @inlinable
-  public static func <*> <B>(f: Parallel<(A) -> B>, x: Parallel<A>) -> Parallel<B> {
-    return x.apply(f)
+  public static func <*> <NewOutput>(
+    lhs: Parallel<(Output) -> NewOutput>,
+    rhs: Parallel<Output>
+  ) -> Parallel<NewOutput> {
+    return rhs.apply(lhs)
   }
 }
 
@@ -119,13 +129,13 @@ public func traverse<C, A, B>(
 where C: Collection, C.Element == A {
   return { xs in
     guard !xs.isEmpty else { return pure([]) }
-    
-    return Parallel<[B]> { callback in
+
+    return Parallel<[B]>(unsafe: { callback in
       let queue = DispatchQueue(label: "pointfree.parallel.sequence")
-      
+
       var completed = 0
       var results = [B?](repeating: nil, count: Int(xs.count))
-      
+
       for (idx, parallel) in xs.map(f).enumerated() {
         parallel.run { b in
           queue.sync {
@@ -137,7 +147,7 @@ where C: Collection, C.Element == A {
           }
         }
       }
-    }
+    })
   }
 }
 
@@ -151,22 +161,22 @@ public func sequence<C, A>(_ xs: C) -> Parallel<[A]> where C: Collection, C.Elem
 extension Parallel: Alt {
   @inlinable
   public static func <|> (lhs: Parallel, rhs: @autoclosure @escaping () -> Parallel) -> Parallel {
-    return .init { f in
+    return .init(unsafe: { f in
       var finished = false
-      let callback: (A) -> () = {
+      let callback: (Output) -> () = {
         guard !finished else { return }
         finished = true
         f($0)
       }
       lhs.run(callback)
       rhs().run(callback)
-    }
+    })
   }
 }
 
 // MARK: - Semigroup
 
-extension Parallel: Semigroup where A: Semigroup {
+extension Parallel: Semigroup where Output: Semigroup {
   @inlinable
   public static func <> (lhs: Parallel, rhs: Parallel) -> Parallel {
     return curry(<>) <¢> lhs <*> rhs
@@ -175,9 +185,9 @@ extension Parallel: Semigroup where A: Semigroup {
 
 // MARK: - Monoid
 
-extension Parallel: Monoid where A: Monoid {
+extension Parallel: Monoid where Output: Monoid {
   @inlinable
   public static var empty: Parallel {
-    return pure(A.empty)
+    return pure(Output.empty)
   }
 }

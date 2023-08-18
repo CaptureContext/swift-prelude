@@ -1,3 +1,4 @@
+@inlinable
 public func left<A, B, C>(
   _ a2b: @escaping (A) -> B
 ) -> (Either<A, C>) -> Either<B, C> {
@@ -11,6 +12,7 @@ public func left<A, B, C>(
   }
 }
 
+@inlinable
 public func right<A, B, C>(
   _ b2c: @escaping (B) -> C
 ) -> (Either<A, B>) -> Either<A, C> {

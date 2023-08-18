@@ -18,7 +18,7 @@ final class DependencyTests: XCTestCase {
     let parallel = withDependencies {
       $0.date.now = Date(timeIntervalSince1970: 1234567890)
     } operation: {
-      Parallel<TimeInterval> { $0(DependencyValues._current.date.now.timeIntervalSince1970) }
+      Parallel<TimeInterval>(unsafe: { $0(DependencyValues._current.date.now.timeIntervalSince1970) })
     }
 
     let expectation = self.expectation(description: "parallel")
